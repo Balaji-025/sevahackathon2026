@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="NamNilam – A Farmer-First Digital Land Acquisition & Compensation Portal. Samriddh Annadata, Samriddh Bharat.">
+  <meta name="theme-color" content="#2E7D32">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NamNilam">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>NamNilam | நம் நிலம் | डिजिटल भूमि अधिग्रहण पोर्टल</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preconnect to OpenStreetMap tile servers for faster GIS loading -->
+  <link rel="preconnect" href="https://tile.openstreetmap.org">
+
+  <style>
+    :root {
+      --primary-green: #2E7D32;
+      --dark-green: #1B5E20;
+      --saffron-accent: #F57C00;
+      --surface-bg: #F9FBF9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: var(--surface-bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Pre-Flutter Initial Loading Screen (Low-Bandwidth Friendly) */
+    #namnilam-loader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #F9FBF9 0%, #E8F5E9 100%);
+      z-index: 99999;
+      transition: opacity 0.45s ease-out, visibility 0.45s ease-out;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #namnilam-loader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .emblem-badge {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      background-color: var(--primary-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(46, 125, 50, 0.25);
+      margin-bottom: 20px;
+      border-bottom: 4px solid var(--saffron-accent);
+    }
+
+    .emblem-badge svg {
+      width: 42px;
+      height: 42px;
+      fill: #FFFFFF;
+    }
+
+    .portal-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--dark-green);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .portal-multilingual {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--saffron-accent);
+      margin-bottom: 8px;
+    }
+
+    .portal-tagline {
+      font-size: 14px;
+      color: #4A5568;
+      max-width: 380px;
+      line-height: 1.4;
+      margin-bottom: 28px;
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 220px;
+      height: 6px;
+      background-color: #C8E6C9;
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-green), var(--saffron-accent));
+      border-radius: 99px;
+      position: absolute;
+      animation: indeterminateSlide 1.4s infinite ease-in-out;
+    }
+
+    .status-text {
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2E7D32;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    @keyframes indeterminateSlide {
+      0% { left: -45%; }
+      100% { left: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Initial Branded Splash Loader -->
+  <div id="namnilam-loader" role="status" aria-live="polite">
+    <div class="emblem-badge" aria-hidden="true">
+      <!-- Map Parcel & Agriculture Leaf Icon -->
+      <svg viewBox="0 0 24 24">
+        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+      </svg>
+    </div>
+    <h1 class="portal-title">NamNilam</h1>
+    <div class="portal-multilingual">நம் நிலம் • नम निलम</div>
+    <p class="portal-tagline">
+      Samriddh Annadata, Samriddh Bharat<br>
+      Farmer-First Digital Land Acquisition &amp; Compensation Portal
+    </p>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="status-text" id="loader-status">Initializing GIS &amp; Land Records...</div>
+  </div>
+
+  <!-- Flutter 3.x Bootstrap Script -->
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var loader = document.getElementById('namnilam-loader');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(function () {
+          loader.remove();
+        }, 500);
+      }
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

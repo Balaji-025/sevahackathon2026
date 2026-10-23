@@ -1,0 +1,25 @@
+
+
+{
+    "name": "NamNilam - Land Acquisition & Farmer Compensation Portal",
+    "short_name": "NamNilam",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F9FBF9",
+    "theme_color": "#2E7D32",
+    "description": "Samriddh Annadata, Samriddh Bharat - Transparent Land Acquisition & Compensation Portal.",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
